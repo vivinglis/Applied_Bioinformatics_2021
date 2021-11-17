@@ -7,10 +7,10 @@ library(ggplot2)
 library(cowplot)
 
 # Read in tables
-corr_avgs <- read.table("Applied_Bioinformatics_2021/1_spearman_corr_avgs.tsv", header = TRUE) 
-corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/1_spearman_corr_avgs_with_pro.tsv", header = TRUE) 
-corr_rep <- read.table("Applied_Bioinformatics_2021/1_spearman_corr_rep.tsv", header = TRUE) 
-corr_rep_pro <- read.table("Applied_Bioinformatics_2021/1_spearman_corr_rep_with_pro.tsv", header = TRUE) 
+corr_avgs <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_avgs.tsv", header = TRUE) 
+corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_avgs_with_pro.tsv", header = TRUE) 
+corr_rep <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_rep.tsv", header = TRUE) 
+corr_rep_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_rep_with_pro.tsv", header = TRUE) 
 
 # All genes
 corr_avgs$Tissue <- as.factor(corr_avgs$Tissue)
