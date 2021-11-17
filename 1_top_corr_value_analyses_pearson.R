@@ -7,10 +7,10 @@ library(ggplot2)
 library(cowplot)
 
 # Read in tables
-corr_avgs <- read.table("Applied_Bioinformatics_2021/1_2_pearson_corr_avgs.tsv", header = TRUE) 
-corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/1_2_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
-corr_rep <- read.table("Applied_Bioinformatics_2021/1_2_pearson_corr_rep.tsv", header = TRUE) 
-corr_rep_pro <- read.table("Applied_Bioinformatics_2021/1_2_pearson_corr_rep_with_pro.tsv", header = TRUE) 
+corr_avgs <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_avgs.tsv", header = TRUE) 
+corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
+corr_rep <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep.tsv", header = TRUE) 
+corr_rep_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep_with_pro.tsv", header = TRUE) 
  
 # All genes
 corr_avgs$Tissue <- as.factor(corr_avgs$Tissue)
@@ -36,7 +36,6 @@ rep_p <- ggplot(corr_rep, aes(x=Tissue, y=Value, fill=Tissue))+
          geom_violin() + 
          geom_boxplot(width=0.1, fill = "white") +
          labs(title="Using replicas with promotor", y = "Correlation value")
-
 
 plot_row <- plot_grid(avgs, avgs_p, rep, rep_p, labels = c("A", "B", "C", "D"))
 
