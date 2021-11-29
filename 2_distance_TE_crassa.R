@@ -117,31 +117,31 @@ distance_matrix_long <- distance_matrix
 # Sex tissue 
 long <- ggplot(distance_matrix_long, aes(distance, met_sex)) + 
               geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 300000, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 300000, aes(label = ..rr.label..))+
               labs(title="Compare to long TEs", y = "Methylation level",
                    x = "Distance to closest TE")
 
 close_distance_long <- subset(distance_matrix_long, distance <=  1000)
 long_close <- ggplot(close_distance_long, aes(distance, met_sex )) + 
               geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 750, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 750, aes(label = ..rr.label..))+
               labs(title="Compare to long TEs", y = "Methylation level",
                    x = "Distance to closest TE")
 
 short <- ggplot(distance_matrix_short, aes(distance, met_sex )) + 
          geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 62500, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 62500, aes(label = ..rr.label..))+
          labs(title="Compare to short TEs", y = "Methylation level",
               x = "Distance to closest TE")
 
 close_distance_short <- subset(distance_matrix_short, distance <=  1000)
 short_close <- ggplot(close_distance_short, aes(distance, met_sex )) + 
                geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 750, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 750, aes(label = ..rr.label..))+
                labs(title="Compare to short TEs", y = "Methylation level",
                      x = "Distance to closest TE")
 
@@ -167,8 +167,8 @@ plot_grid(
 # Veg tissue 
 long <- ggplot(distance_matrix_long, aes(distance, met_veg)) + 
   geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 300000, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 300000, aes(label = ..rr.label..))+
   labs(title="Compare to long TEs", y = "Methylation level",
        x = "Distance to closest TE") 
   
@@ -176,23 +176,23 @@ long <- ggplot(distance_matrix_long, aes(distance, met_veg)) +
 close_distance_long <- subset(distance_matrix_long, distance <=  1000)
 long_close <- ggplot(close_distance_long, aes(distance, met_veg )) + 
   geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 750, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 750, aes(label = ..rr.label..))+
   labs(title="Compare to long TEs", y = "Methylation level",
        x = "Distance to closest TE")
 
 short <- ggplot(distance_matrix_short, aes(distance, met_veg )) + 
   geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 62500, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 62500, aes(label = ..rr.label..))+
   labs(title="Compare to short TEs", y = "Methylation level",
        x = "Distance to closest TE")
 
 close_distance_short <- subset(distance_matrix_short, distance <=  1000)
 short_close <- ggplot(close_distance_short, aes(distance, met_veg )) + 
   geom_point()+ geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))+
+  stat_regline_equation(label.y = 1.00, label.x = 750, aes(label = ..eq.label..)) +
+  stat_regline_equation(label.y = 0.9, label.x = 750, aes(label = ..rr.label..))+
   labs(title="Compare to short TEs", y = "Methylation level",
        x = "Distance to closest TE")
 
@@ -212,18 +212,6 @@ plot_grid(
   ncol = 1,
   rel_heights = c(0.1, 1)
 )
-
-
-ggplot(distance_matrix_short, aes(distance, met_sex )) + 
-  geom_point()+ geom_smooth(method = "lm") +
-  labs(title="Compare to short TEs", y = "Methylation level",
-       x = "Distance to closest TE")
-
-ggplot(distance_matrix_short, aes(distance, met_sex )) +
-geom_point() + 
-  geom_smooth(method = "lm", se=FALSE) +
-  stat_regline_equation(label.y = 1.00, label.x = 50000, aes(label = ..eq.label..)) +
-  stat_regline_equation(label.y = 0.9, label.x = 50000, aes(label = ..rr.label..))
 
 
 
