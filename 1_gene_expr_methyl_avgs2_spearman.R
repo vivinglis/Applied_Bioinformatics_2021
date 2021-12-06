@@ -3,10 +3,10 @@
 
 # Methylation and gene expression table
 gene_expr <- read.table("Applied_Bioinformatics_2021/1_rlog_normalised_avgs.tsv", header = TRUE) 
-# met <- read.table("Applied_Bioinformatics_2021/1_orthologous_genes_methylation.tsv", header = TRUE)
+met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv", header = TRUE)
 
 # Methylation with promotor region 
-met <- read.table("Applied_Bioinformatics_2021/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
+#met <- read.table("Applied_Bioinformatics_2021/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
 
 # Spearman correlation data table 
 spearman_corr <- setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Geneid", "Allel", "Tissue", "Value"))
@@ -41,11 +41,6 @@ for (gene in genes) {
     }
     #rownames(per_gene) <- per_gene$Sample
     
-    # Plot # if time use ggplot2 instead since they look better
-    #plot(per_gene$Met, per_gene$Expr, ann=FALSE)
-    #title(xlab="Methylation")
-    #title(ylab="Gene expression")                                
-    
     corr_value <- cor(per_gene$Met, per_gene$Expr, method = "spearman") # Can also use cor.test() 
     corr_new <- data.frame(gene, samples_allel[num], samples_tissue[num], corr_value)
     names(corr_new) <- c("Geneid", "Allel", "Tissue", "Value")
@@ -53,13 +48,5 @@ for (gene in genes) {
     num = num +1
   }
 }
-stripchart(spearman_corr$Value,
-           main="Spearman correlation value",
-           xlab="",
-           ylab="Correlation value",
-           method="jitter",
-           col="blue",
-           pch=1, 
-           vertical=TRUE
-)
-write.table(spearman_corr, file = "1_spearman_corr_avgs_with_pro.tsv")
+#write.table(spearman_corr, file = "new/1_spearman_corr_avgs.tsv")
+write.table(spearman_corr, file = "new/1_spearman_corr_avgs_with_pro.tsv")
