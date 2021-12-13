@@ -113,7 +113,8 @@ for(stuff in sex_list){
 title = textGrob("SEX: Expression ~ Methylation",gp=gpar(fontsize=15,font=3))
 grid.arrange(grobs = plot_list, ncol = 5, top = title )
 
-tit <- expression(paste("Methylation and Expression in ", italic("Neurospora crassa")))
+tit <- expression(paste("Methylation and expression in sex tissue of ", 
+                        italic("Neurospora crassa"), " (BA)"))
 
 
 # Plot of just N. crassa for popular science presentation
@@ -123,6 +124,7 @@ popsciplot <- ggplot(sex_list[[1]], aes(methylation, expression))+
   geom_smooth(method=lm, na.rm = TRUE)+
   stat_regline_equation(label.y = 16, label.x = 0.75, aes(label = ..rr.label..), na.rm = TRUE)
 
+popsciplot
 
 ######################################### VEG TISSUE ######################################
 
@@ -179,7 +181,7 @@ for(vstuff in veg_list){
     geom_point(na.rm = TRUE)+
     labs(title = names(veg_list)[vlistpos])+
     geom_smooth(method=lm, na.rm = TRUE)+
-    stat_regline_equation(label.y = 16, label.x = 0.75, aes(label = ..rr.label..), na.rm = TRUE)
+    stat_regline_equation(label.y = 16, label.x = 0.5, aes(label = ..rr.label..), na.rm = TRUE)
   plot_list_veg[[vpos]] <- vplotstuff
   vpos <- vpos + 1
   vlistpos <- vlistpos + 1
@@ -375,7 +377,7 @@ for(meanitems in mean_met){
     geom_point(na.rm = TRUE)+
     labs(title = names(mean_met)[listpos1])+
     geom_smooth(method=lm, na.rm = TRUE)+
-    stat_regline_equation(label.y = 15, label.x = 0, aes(label = ..rr.label..), na.rm = TRUE)+
+    stat_regline_equation(label.y = 17, label.x = 0.15, aes(label = ..rr.label..), na.rm = TRUE)+
     xlim(0.15, 0.30)
   plot_list_mean[[pos1]] <- meanplots
   pos1 <- pos1 + 1
