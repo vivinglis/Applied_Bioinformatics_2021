@@ -269,6 +269,10 @@ names(sdlistv_top) <- veglins
 # For each item in e.g. the sex_list go through it and only plot the numbers
 # that are above the threshold value as specified in the top list
 
+
+# To run the rest of the code in this file, you must specify if the input should
+# be from sex tissue or from veg tissue
+
 # SEX
 linsnames <- lins
 tissuelist <- sex_list
@@ -420,15 +424,16 @@ a <- subset_list_top[[1]][[3]]
 b <- subset_list_bot[[1]][[3]]
 c <- mean_met[[1]][[3]]
 
-tit_ecdf <- expression(paste("Expression ECDF for Methylation Levels in ", italic("Neurospora crassa")))
+tit_ecdf <- expression(paste("Expression for Methylation Levels in ", 
+                             italic("Neurospora crassa"), " (sex tissue, BA)"))
 
 
 plot(ecdf(a), verticals=TRUE, do.points=FALSE, col='royalblue4',
      main=tit_ecdf, xlab="Expression", ylab="Density")
 plot(ecdf(b), verticals=TRUE, do.points=FALSE, add=TRUE, col='red')
 plot(ecdf(c), verticals=TRUE, do.points=FALSE, add=TRUE, col='sienna1')
-legend('topleft',c('Mean methylation','High methylation', 'Low methylation'),
-       fill = c('sienna1', 'royalblue4', 'red'), bty = 'n',
+legend('topleft',c('High methylation', 'Mean methylation','Low methylation'),
+       fill = c('royalblue4', 'sienna1', 'red'), bty = 'n',
        border = NA)
 
 
@@ -448,21 +453,23 @@ for(subsets in subset_idx){
   a <- subset_list_top[[subsets]][[3]]
   b <- subset_list_bot[[subsets]][[3]]
   c <- mean_met[[subsets]][[3]]
-  ecdflist <- Map(f  = stat_function, colour = c('royalblue4', 'red', 'sienna1'),
+  ecdflist <- Map(f  = stat_function,colour = c('royalblue4', 'red', 'sienna1'),
                   fun = list(ecdf(a), ecdf(b), ecdf(c)), geom = 'step')
   cplot <- ggplot(data = axisdf, aes(x = xax)) + 
     ecdflist +
     labs(title = names(mean_met)[listpos1])+
     xlab("Expression")+
     ylab("Density")+
-    theme(legend.position = "none")
+    annotate("label", x=15, y=0.25, label= "low", fill="white", color = 'red')+
+    annotate("label", x=15, y=0.5, label= "mean", fill="white", color = 'sienna1')+
+    annotate("label", x=15, y=0.75, label= "high", fill="white", color = 'royalblue4')
   cplot_list[[pos1]] <- cplot
   pos1 <- pos1 + 1
   listpos1 <- listpos1 + 1
 }
 
 grid.arrange(grobs = cplot_list, ncol = 5, 
-             top = textGrob("ECDF: Expression for Varying Methylation", gp=gpar(fontsize=15,font=3)))
+             top = textGrob("Expression for Varying Methylation Levels", gp=gpar(fontsize=15,font=3)))
 
 # For interpretation
 # Red = low methylation
@@ -517,7 +524,7 @@ colnames(ksvals) <- c('lineages', 'p-value')
 
 
 
-###### Geometric Density ######
+############################## Geometric Density ############################
 
 # Stolen code from the internet
 # https://stackoverflow.com/questions/3541713/how-to-plot-two-histograms-together-in-r
@@ -526,35 +533,36 @@ library(grid)
 library(gridGraphics)
 
 
-densplotlist <- list()
+par(mfrow=c(2,5))
+#densplotlist <- list()
 idx <- 1
 for(lineanum in index_list){
-  testx <- mean_met[[lineanum]][[3]]
-  testy <- subset_list_top[[lineanum]][[3]]
-  testz <- subset_list_bot[[lineanum]][[3]]
+  meanexp <- mean_met[[lineanum]][[3]]
+  highexp <- subset_list_top[[lineanum]][[3]]
+  lowexp <- subset_list_bot[[lineanum]][[3]]
   
   ## calculate the density - don't plot yet
-  densCarrot <- density(testx, na.rm = TRUE)
-  densCuke <- density(testy, na.rm = TRUE)
-  densCauli <- density(testz, na.rm = TRUE)
+  densMean <- density(meanexp, na.rm = TRUE)
+  densHigh <- density(highexp, na.rm = TRUE)
+  densLow <- density(lowexp, na.rm = TRUE)
   ## calculate the range of the graph
   xlim <- range(-6, 16)
   ylim <- range(0,0.25)
   #pick the colours
-  carrotCol <- rgb(1,0,0,0.2)
-  cukeCol <- rgb(0,0,1,0.2)
-  cauliCol <- rgb(0,1,1,0.2)
-  ## plot the carrots and set up most of the plot parameters
-  plot(densCarrot, xlim = xlim, ylim = ylim, xlab = 'Expression',
+  meanCol <- rgb(1,0,0,0.2)
+  highCol <- rgb(0,0,1,0.2)
+  lowCol <- rgb(0,1,1,0.2)
+  ## plot the mean range and set up most of the plot parameters
+  plot(densMean, xlim = xlim, ylim = ylim, xlab = 'Expression',
        main = names(mean_met)[idx]) #panel.first = grid())
   #put our density plots in
-  polygon(densCarrot, density = -1, col = carrotCol)
-  polygon(densCuke, density = -1, col = cukeCol)
-  polygon(densCauli, density = -1, col = cauliCol)
+  polygon(densMean, density = -1, col = meanCol)
+  polygon(densHigh, density = -1, col = highCol)
+  polygon(densLow, density = -1, col = lowCol)
   ## add a legend in the corner
-  #legend('topleft',c('Mean methylation','High methylation', 'Low methylation'),
-  #       fill = c(carrotCol, cukeCol, cauliCol), bty = 'n',
-  #       border = NA)
+  legend('topleft',c('High','Mean', 'Low'),
+         fill = c(highCol, meanCol, lowCol), bty = 'n',
+         border = NA)
   
   #grid.echo()
   #a <- grid.grab()
@@ -562,9 +570,49 @@ for(lineanum in index_list){
   #idx <- idx + 1
 }
 
-typeof(densplotlist)
+#typeof(densplotlist)
 
-par(mfrow=c(2,5))
+mtext("Distribution of expression for varying levels of methylation", 
+      side = 3, line = -1.5, outer = TRUE)
 
-grid.arrange(grobs = densplotlist[1:5], ncol = 3, nrow = 2)
+
+#grid.arrange(grobs = densplotlist[1:5], ncol = 3, nrow = 2)
+
+
+
+
+# Plot for popular science presentation
+par(mfrow=c(1,1))
+plot.new()
+
+title_cumulat <- expression(paste("Distribution of expression in ", 
+                                  italic("Neurospora crassa"), " (sex tissue, BA)"))
+
+
+meanexp <- mean_met[[1]][[3]]
+highexp <- subset_list_top[[1]][[3]]
+lowexp <- subset_list_bot[[1]][[3]]
+
+## calculate the density - don't plot yet
+densMean <- density(meanexp, na.rm = TRUE)
+densHigh <- density(highexp, na.rm = TRUE)
+densLow <- density(lowexp, na.rm = TRUE)
+## calculate the range of the graph
+xlim <- range(-6, 16)
+ylim <- range(0,0.25)
+#pick the colours
+meanCol <- rgb(1,0,0,0.2)
+highCol <- rgb(0,0,1,0.2)
+lowCol <- rgb(0,1,1,0.2)
+## plot the mean range and set up most of the plot parameters
+plot(densMean, xlim = xlim, ylim = ylim, xlab = 'Expression',
+     main = title_cumulat, panel.first = grid())
+#put our density plots in
+polygon(densMean, density = -1, col = meanCol)
+polygon(densHigh, density = -1, col = highCol)
+polygon(densLow, density = -1, col = lowCol)
+## add a legend in the corner
+legend('topleft',c('High methylation','Mean methylation', 'Low methylation'),
+       fill = c(highCol, meanCol, lowCol), bty = 'n',
+       border = NA)
 
