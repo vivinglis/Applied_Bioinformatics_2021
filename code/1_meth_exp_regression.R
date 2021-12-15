@@ -487,7 +487,7 @@ testy <- subset_list_top[[5]][[3]]
 
 head(testx)
 head(testy)
-ks.test(testx, testy, alternative = "less")
+ks.test(testx, ecdf(testy), alternative = "less")
 #   cannot compute correct p-values with ties?
 
 # Basically, yes, even the closest one is significantly lower than mean.
@@ -513,14 +513,28 @@ for(linnum in index_list){
   x <- mean_met[[idx]][[3]]
   y <- subset_list_top[[idx]][[3]]
   pval <- ks.test(x, y, alternative = 'less')[[2]]
-  ksvals <- rbind(ksvals, c(veglins[idx], pval))
+  ksvals <- rbind(ksvals, c(linsnames[idx], pval))
   idx <- idx + 1
 
 }
 colnames(ksvals) <- c('lineages', 'p-value')
 
+ksvals$'p-value' <- as.numeric(ksvals$`p-value`)
+
 
 #write.table(ksvals, file="Applied_Bioinformatics_2021/data_tables/ksvals_veg_mh.txt", sep=";")
+
+# Make these into nice presentable tables
+#library(gt)
+#library(gapminder)
+
+c_rn <- 13
+
+ksvals %>% 
+  head(c_rn) %>% 
+  gt() %>% 
+  tab_header(title = "Kolmogorov-Smirnov Test")
+
 
 
 
