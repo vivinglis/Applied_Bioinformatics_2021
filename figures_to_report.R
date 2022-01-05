@@ -1,76 +1,63 @@
-# Spearman correlation values plots
+# Plots using no mating type separated correlation values
 
 rm(list = ls())
 
 # Packages
 library(ggplot2)
 library(cowplot)
+library(ggVennDiagram)
 
-# Read in tables
-corr_avgs <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_avgs.tsv", header = TRUE) 
-corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_avgs_with_pro.tsv", header = TRUE) 
-corr_rep <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_rep.tsv", header = TRUE) 
-corr_rep_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_spearman_corr_rep_with_pro.tsv", header = TRUE) 
+corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_avgs_with_pronon_allel_sep.tsv", header = TRUE) 
+corr_avgs <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_avgs_non_allel_sep.tsv", header = TRUE)
+corr_rep <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_rep_non_allel_sep.tsv", header = TRUE) 
+corr_rep_pro <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_rep_with_pronon_allel_sep.tsv", header = TRUE)
+
 
 # All genes
 corr_avgs$Tissue <- as.factor(corr_avgs$Tissue)
 avgs <- ggplot(corr_avgs, aes(x=Tissue, y=Value, fill=Tissue))+
-        geom_violin() + 
-        labs(title="Using average of replicas", y = "Correlation value")+
-        geom_boxplot(width=0.1, fill = "white")
+  geom_violin() + 
+  labs(title="Using average of replicas", y = "Correlation value")+
+  geom_boxplot(width=0.1, fill = "white")
 
+
+        
 corr_avgs_pro$Tissue <- as.factor(corr_avgs_pro$Tissue)
 avgs_p <- ggplot(corr_avgs_pro, aes(x=Tissue, y=Value, fill=Tissue))+
-          geom_violin() + 
-          labs(title="Using average of replicas with promotor", y = "Correlation value")+
-          geom_boxplot(width=0.1, fill = "white")
+  geom_violin() + 
+  labs(title="Using average of replicas with promotor", y = "Correlation value")+
+  geom_boxplot(width=0.1, fill = "white")
 
 corr_rep$Tissue <- as.factor(corr_rep$Tissue)
 rep <- ggplot(corr_rep, aes(x=Tissue, y=Value, fill=Tissue))+
-       geom_violin() + 
-       labs(title="Using replicas", y = "Correlation value")+
-       geom_boxplot(width=0.1, fill = "white")
+  geom_violin() + 
+  labs(title="Using replicas", y = "Correlation value")+
+  geom_boxplot(width=0.1, fill = "white")
 
 corr_rep_pro$Tissue <- as.factor(corr_rep_pro$Tissue)
 rep_p <- ggplot(corr_rep, aes(x=Tissue, y=Value, fill=Tissue))+
-       geom_violin() + 
-       geom_boxplot(width=0.1, fill = "white") +
-       labs(title="Using replicas with promotor", y = "Correlation value")
-       
+  geom_violin() + 
+  geom_boxplot(width=0.1, fill = "white") +
+  labs(title="Using replicas with promotor", y = "Correlation value")
 
-plot_row <- plot_grid(avgs, avgs_p, rep, rep_p, labels = c("A", "B", "C", "D"))
+s <- 15 
 
-title <- ggdraw() + 
-  draw_label(
-    "Spearman correation values for all genes",
-    fontface = 'bold',
-    x = 0,
-    hjust = 0
-  ) +
-  theme(plot.margin = margin(0, 0, 0, 7))
+plot_row <- plot_grid(avgs + theme(text = element_text(size = s)),
+                      avgs_p + theme(text = element_text(size = s)),
+                      rep + theme(text = element_text(size = s)),
+                      rep_p + theme(text = element_text(size = s)),
+                      labels = c("A", "B", "C", "D"))
 
-plot_grid(
-  title, plot_row,
+title <- ggdraw() + theme(plot.margin = margin(0, 0, 0, 7))
+
+plot_grid(plot_row,
   ncol = 1,
   rel_heights = c(0.1, 1)
 )
 
 
-# ---------------------Top hundred for each tissue-----------------------
-
+# Plot with avgs pro top 100 enskilt
 top_num <- 100
-
-veg <- subset(corr_avgs, Tissue == "veg")
-sex <- subset(corr_avgs, Tissue == "sex")
-top_veg <- head(veg[order(-veg$Value, decreasing =TRUE),], top_num)
-top_sex <- head(sex[order(-sex$Value, decreasing =TRUE),], top_num)
-top <- rbind(top_veg, top_sex)
-top$Tissue <- as.factor(top$Tissue)
-avgs <- ggplot(top, aes(x=Tissue, y=Value, fill=Tissue))+
-        geom_violin() + 
-        labs(title="Using average of replicas ", y = "Correlation value") +
-        geom_dotplot(binaxis='y', stackdir='center', dotsize=0.42, fill="black")+
-        ylim(c(-1,-0.88))
 
 veg <- subset(corr_avgs_pro, Tissue == "veg")
 sex <- subset(corr_avgs_pro, Tissue == "sex")
@@ -78,72 +65,30 @@ top_veg <- head(veg[order(-veg$Value, decreasing =TRUE),], top_num)
 top_sex <- head(sex[order(-sex$Value, decreasing =TRUE),], top_num)
 top <- rbind(top_veg, top_sex)
 avgs_p <- ggplot(top, aes(x=Tissue, y=Value, fill=Tissue))+
-          geom_violin() + 
-          labs(title="Using average of replicas  with promotor ", y = "Correlation value")+
-          geom_dotplot(binaxis='y', stackdir='center', dotsize=0.42, fill="black")+
-          ylim(c(-1,-0.88))
-  
-veg <- subset(corr_rep, Tissue == "veg")
-sex <- subset(corr_rep, Tissue == "sex")
-top_veg <- head(veg[order(-veg$Value, decreasing =TRUE),], top_num)
-top_sex <- head(sex[order(-sex$Value, decreasing =TRUE),], top_num)
-top <- rbind(top_veg, top_sex)
-rep <- ggplot(top, aes(x=Tissue, y=Value, fill=Tissue))+
-       geom_violin() + 
-       labs(title="Using replicas", y = "Correlation value")+
-       geom_dotplot(binaxis='y', stackdir='center', dotsize=0.42, fill="black")+
-       ylim(c(-1,-0.88))
+  geom_violin() + 
+  labs(y = "Correlation value")+
+  geom_boxplot(width=0.1, fill = "white")+
+  ylim(c(-1,-0.88))
 
-veg <- subset(corr_rep_pro, Tissue == "veg")
-sex <- subset(corr_rep_pro, Tissue == "sex")
-top_veg <- head(veg[order(-veg$Value, decreasing =TRUE),], top_num)
-top_sex <- head(sex[order(-sex$Value, decreasing =TRUE),], top_num)
-top <- rbind(top_veg, top_sex)
-rep_p <- ggplot(top, aes(x=Tissue, y=Value, fill=Tissue))+
-         geom_violin() + 
-         labs(title="Using replicas  with promotor ", y = "Correlation value")+
-         geom_dotplot(binaxis='y', stackdir='center', dotsize=0.42, fill="black")+
-         ylim(c(-1,-0.88))
+avgs_p <- avgs_p + theme(text = element_text(size = s),
+                         axis.text.x = element_text(size = 15), 
+                         axis.text.y = element_text(size = 15))
+avgs_p
 
-plot_row <- plot_grid(avgs, avgs_p, rep, rep_p, labels = c("A", "B", "C", "D"))
 
-title <- ggdraw() + 
-  draw_label(
-    "Spearman correation values for top 100 genes in each tissue",
-    fontface = 'bold',
-    x = 0,
-    hjust = 0
-  ) +
-  theme(plot.margin = margin(0, 0, 0, 7))
 
-plot_grid(
-  title, plot_row,
-  ncol = 1,
-  rel_heights = c(0.1, 1)
-)
+
 
 #------------------------Spread among top genes--------------------------
 
 top_num <- 100
 
-# Keep one incommented, and change name on line 258 accordingly.
-
-# Avgs without promotor
-#veg <- subset(corr_avgs, Tissue == "veg")
-#sex <- subset(corr_avgs, Tissue == "sex")
+# Load dataset avgs pro, created from correlation value where mating type was separated
+corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
 
 # Avgs with promotor, 
 veg <- subset(corr_avgs_pro, Tissue == "veg")
 sex <- subset(corr_avgs_pro, Tissue == "sex")
-
-#Rep without promotor
-#veg <- subset(corr_rep, Tissue == "veg")
-#sex <- subset(corr_rep, Tissue == "sex")
-
-# Rep with promotor, 
-#veg <- subset(corr_rep_pro, Tissue == "veg")
-#sex <- subset(corr_rep_pro, Tissue == "sex")
-
 
 veg_sa <- subset(veg, Allel == "sa")
 veg_ba <- subset(veg, Allel == "BA")
@@ -176,7 +121,7 @@ for (gene in top_veg_sa$Geneid) {
 
 a <- ggplot(spread, aes(x=Sample, y=Value, fill=Sample))+
   geom_violin() + 
-  labs(title="Top 100 in veg sa compare to the same genes in the other samples ", y = "Correlation value")+
+  labs(title="Top 100 in veg sa", y = "Correlation value")+
   geom_boxplot(width=0.1, fill = "white")
 
 
@@ -200,7 +145,7 @@ for (gene in top_veg_ba$Geneid) {
 
 b <- ggplot(spread, aes(x=Sample, y=Value, fill=Sample))+
   geom_violin() + 
-  labs(title="Top 100 in veg ba compare to the same genes in the other samples ", y = "Correlation value")+
+  labs(title="Top 100 in veg ba ", y = "Correlation value")+
   geom_boxplot(width=0.1, fill = "white")
 
 
@@ -224,7 +169,7 @@ for (gene in top_sex_sa$Geneid) {
 
 c <- ggplot(spread, aes(x=Sample, y=Value, fill=Sample))+
   geom_violin() + 
-  labs(title="Top 100 in sex sa compare to the same genes in the other samples ", y = "Correlation value")+
+  labs(title="Top 100 in sex sa", y = "Correlation value")+
   geom_boxplot(width=0.1, fill = "white")
 
 # sex ba as top
@@ -247,27 +192,42 @@ for (gene in top_sex_ba$Geneid) {
 
 d <- ggplot(spread, aes(x=Sample, y=Value, fill=Sample))+
   geom_violin() + 
-  labs(title="Top 100 in sex sa compare to the same genes in the other samples ", y = "Correlation value")+
+  labs(title="Top 100 in sex sa", y = "Correlation value")+
   geom_boxplot(width=0.1, fill = "white")
 
 # Plot all in same plot
-plot_row <- plot_grid(a, b, c, d, labels = c("A", "B", "C", "D"))
+s <- 15
+plot_row <- plot_grid(a + theme(text = element_text(size = s)),
+                      b + theme(text = element_text(size = s)),
+                      c + theme(text = element_text(size = s)),
+                      d + theme(text = element_text(size = s)), labels = c("A", "B", "C", "D"))
 
-title <- ggdraw() + 
-  draw_label(
-    "Spearman correation values for avgs with promotor",
-    fontface = 'bold',
-    x = 0,
-    hjust = 0
-  ) +
-  theme(plot.margin = margin(0, 0, 0, 7))
 
-plot_grid(
-  title, plot_row,
+plot_grid(plot_row,
   ncol = 1,
   rel_heights = c(0.1, 1)
 )
 
+# --------------------------intersection --------------------------------
+# Avgs with promotor, 
+veg <- subset(corr_avgs_pro, Tissue == "veg")
+sex <- subset(corr_avgs_pro, Tissue == "sex")
+
+veg_sa <- subset(veg, Allel == "sa")
+veg_ba <- subset(veg, Allel == "BA")
+sex_sa <- subset(sex, Allel == "sa")
+sex_ba <- subset(sex, Allel == "BA")
+
+top_veg_sa <- head(veg_sa[order(-veg_sa$Value, decreasing =TRUE),], top_num)
+top_veg_ba <- head(veg_ba[order(-veg_ba$Value, decreasing =TRUE),], top_num)
+top_sex_ba <- head(sex_ba[order(-sex_ba$Value, decreasing =TRUE),], top_num)
+top_sex_sa <- head(sex_sa[order(-sex_sa$Value, decreasing =TRUE),], top_num)
+
+top_genes <- data.frame(cbind(top_veg_sa$Geneid, top_veg_ba$Geneid, top_sex_sa$Geneid, top_sex_ba$Geneid))
+names(top_genes) <- c("veg_sa", "veg_ba", "sex_sa", "sex_ba")
+
+b <- ggVennDiagram(top_genes, cex = 100)
+b
 
 
 
