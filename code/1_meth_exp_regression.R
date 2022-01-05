@@ -120,7 +120,9 @@ tit <- expression(paste("Methylation and expression in sex tissue of ",
 # Plot of just N. crassa for popular science presentation
 popsciplot <- ggplot(sex_list[[1]], aes(methylation, expression))+
   geom_point(na.rm = TRUE)+
-  labs(title = tit)+
+  xlab('Gene Methylation Level')+
+  ylab('rlog Normalised Expression')+
+  theme(axis.text=element_text(size=12), axis.title=element_text(size=14))+
   geom_smooth(method=lm, na.rm = TRUE)+
   stat_regline_equation(label.y = 16, label.x = 0.75, aes(label = ..rr.label..), na.rm = TRUE)
 
@@ -429,7 +431,7 @@ tit_ecdf <- expression(paste("Expression for Methylation Levels in ",
 
 
 plot(ecdf(a), verticals=TRUE, do.points=FALSE, col='royalblue4',
-     main=tit_ecdf, xlab="Expression", ylab="Density")
+     main="", xlab="rlog Normalised Expression", ylab="Density")
 plot(ecdf(b), verticals=TRUE, do.points=FALSE, add=TRUE, col='red')
 plot(ecdf(c), verticals=TRUE, do.points=FALSE, add=TRUE, col='sienna1')
 legend('topleft',c('High methylation', 'Mean methylation','Low methylation'),
@@ -619,8 +621,8 @@ meanCol <- rgb(1,0,0,0.2)
 highCol <- rgb(0,0,1,0.2)
 lowCol <- rgb(0,1,1,0.2)
 ## plot the mean range and set up most of the plot parameters
-plot(densMean, xlim = xlim, ylim = ylim, xlab = 'Expression',
-     main = title_cumulat, panel.first = grid())
+plot(densMean, xlim = xlim, ylim = ylim, xlab = 'rlog Normalised Expression',
+     main = "", panel.first = grid())
 #put our density plots in
 polygon(densMean, density = -1, col = meanCol)
 polygon(densHigh, density = -1, col = highCol)
