@@ -431,12 +431,11 @@ tit_ecdf <- expression(paste("Expression for Methylation Levels in ",
 
 
 plot(ecdf(a), verticals=TRUE, do.points=FALSE, col='royalblue4',
-     main="", xlab="rlog Normalised Expression", ylab="Density")
+     main="", xlab="rlog Normalised Expression", ylab="Density", cex.lab = 1.2)
 plot(ecdf(b), verticals=TRUE, do.points=FALSE, add=TRUE, col='red')
 plot(ecdf(c), verticals=TRUE, do.points=FALSE, add=TRUE, col='sienna1')
 legend('topleft',c('High methylation', 'Mean methylation','Low methylation'),
-       fill = c('royalblue4', 'sienna1', 'red'), bty = 'n',
-       border = NA)
+       fill = c('royalblue4', 'sienna1', 'red'), bty = 'n', border = NA, cex = 1.2)
 
 
 # Actual plots
@@ -622,7 +621,7 @@ highCol <- rgb(0,0,1,0.2)
 lowCol <- rgb(0,1,1,0.2)
 ## plot the mean range and set up most of the plot parameters
 plot(densMean, xlim = xlim, ylim = ylim, xlab = 'rlog Normalised Expression',
-     main = "", panel.first = grid())
+     main = "", panel.first = grid(), cex.lab = 1.2)
 #put our density plots in
 polygon(densMean, density = -1, col = meanCol)
 polygon(densHigh, density = -1, col = highCol)
@@ -630,5 +629,5 @@ polygon(densLow, density = -1, col = lowCol)
 ## add a legend in the corner
 legend('topleft',c('High methylation','Mean methylation', 'Low methylation'),
        fill = c(highCol, meanCol, lowCol), bty = 'n',
-       border = NA)
+       border = NA, cex = 1.2)
 
