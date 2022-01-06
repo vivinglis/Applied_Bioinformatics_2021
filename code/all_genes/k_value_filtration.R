@@ -107,6 +107,7 @@ for (geneid in avg_met$Geneid) {
 
 
 # K value filtration 
+# Decide which dataset to load, keep one of df uncommented. 
 
 # Without promotor region
 df <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_non_allel_sep.tsv", header = TRUE)
@@ -132,6 +133,8 @@ df_filt2 <- subset (df, k_value > max_val)
 df_filtered <- rbind(df_filt1, df_filt2)
 rownames(df_filtered) <- df_filtered$Geneid
 
+
+# Find genes which are both high methylated and high k value ect for the different tissues. 
 #sex
 df_filtered_sex <- subset(df_filtered, Tissue == "sex" )
 df_filtered_top_sex <- subset(df_filtered_sex, Geneid %in% top_genes_sex)
