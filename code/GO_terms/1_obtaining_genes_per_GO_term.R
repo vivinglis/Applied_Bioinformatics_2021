@@ -1,5 +1,5 @@
 
-GO_trans <- read.delim("1_GO_translation_table.tsv", TRUE)
+GO_trans <- read.delim("../../data_tables/GO_terms/1_GO_translation_table.tsv", TRUE)
 GO_trans <- GO_trans[order(GO_trans$Geneid),]
 
 GO_terms <- unique(GO_trans$GO.term)

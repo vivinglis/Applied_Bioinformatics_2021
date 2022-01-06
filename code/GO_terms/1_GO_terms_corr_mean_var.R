@@ -1,16 +1,21 @@
 #Correlation analysis
+#Script to plot average correlation and standard deviation for all GO terms, separated by both allel and tissue.
+#After running the script you need to write "p_grid" to see the plot.
+#You have to comment/uncomment the last part depending on if you want to plot standard deviation or average correlation.
+
+
 library("stringi")
 library("ggplot2")
 library("tidyverse")
-# Read in tables
-#pearson_corr_avgs <- read.table("1_pear_corr_GO_terms_avgs.tsv", header = TRUE) 
-pearson_corr_avgs <- read.table("1_2_pearson_corr_avgs.tsv", header = TRUE) 
-pearson_corr_avgs_with_pro <- read.table("1_2_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
-pearson_corr_rep <- read.table("../Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep.tsv", header = TRUE) 
-pearson_corr_rep_with_pro <- read.table("../Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep_with_pro.tsv", header = TRUE) 
 
-#NEED TO REMOVE NAs
-GO_terms  <- read.delim("1_filtered_GO_terms_per_gene_4_or_more_genes_per_GO.tsv")
+
+# Read in tables
+pearson_corr_avgs <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs.tsv", header = TRUE) 
+pearson_corr_avgs_with_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
+pearson_corr_rep <- read.table("../../data_tables/all_genes/1_pearson_corr_rep.tsv", header = TRUE) 
+pearson_corr_rep_with_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_rep_with_pro.tsv", header = TRUE) 
+GO_terms  <- read.delim("../../data_tables/GO_terms/1_filtered_GO_terms_per_gene_4_or_more_genes_per_GO.tsv")
+
 
 corrs <- list(pearson_corr_avgs, pearson_corr_avgs_with_pro, pearson_corr_rep, pearson_corr_rep_with_pro)
 
@@ -54,6 +59,8 @@ for (corr in corrs){
   res_list <- list(res_list, res_df)
 }
 
+# ----------------------------------------- plotting standard deviation -------------------------------------
+#Uncomment if you want to plot standard deviation
 
 data_avgs <- as.data.frame(res_list[[1]][[1]][[1]][[2]])
 data_avgs$Sample <- as.factor(data_avgs$Sample)
@@ -130,7 +137,10 @@ p_grid <- plot_grid(
   # rel_heights values control vertical title margins
   rel_heights = c(0.1, 1)
 )
-# 
+
+# ----------------------------------------- plotting average correlation -------------------------------------
+# #Uncomment this if you want to plot the average correlation
+#
 # data_avgs <- as.data.frame(res_list[[1]][[1]][[1]][[2]])
 # #data_avgs$GO_terms <- as.data.frame(res_list[[1]][[1]][[1]][[3]])
 # 
@@ -210,10 +220,10 @@ p_grid <- plot_grid(
 #   # rel_heights values control vertical title margins
 #   rel_heights = c(0.1, 1)
 # )
-# 
+ 
+### ------------------------------------------------- saving data tables ---------------------------------------------
 
-
-
+# #Uncomment if you want to save the data tables for further analysis
 # num = "avg_and_std"
 # sample_name = "4"
 # 

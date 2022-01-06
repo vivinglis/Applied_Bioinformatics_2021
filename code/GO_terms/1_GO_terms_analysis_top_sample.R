@@ -1,16 +1,21 @@
 #Correlation analysis
+#Script to plot top [top_num] negatively correlated GO term from one sample (sample_name) and their correlation value in the other samples.
+
+# Choose [top_num](1-133) and [sample_name](sa_sex, BA_sex, BA_veg, sa_veg) 
+top_num <- 2
+sample_name <- "sa_sex"
+
+
 library("stringi")
 library("ggplot2")
 library("tidyverse")
 # Read in tables
-pearson_corr_avgs <- read.table("1_data_for_corr_avg_and_std_GO_terms_filtered_4_avgs.tsv", header = TRUE) 
-pearson_corr_avgs_with_pro <- read.table("1_data_for_corr_avg_and_std_GO_terms_filtered_4_avgs_pro.tsv", header = TRUE) 
-pearson_corr_reps <- read.table("1_data_for_corr_avg_and_std_GO_terms_filtered_4_reps.tsv", header = TRUE) 
-pearson_corr_reps_with_pro <- read.table("1_data_for_corr_avg_and_std_GO_terms_filtered_4_reps_pro.tsv", header = TRUE) 
+pearson_corr_avgs <- read.table("../../data_tables/GO_terms/1_data_for_corr_avg_and_std_GO_terms_filtered_4_avgs.tsv", header = TRUE) 
+pearson_corr_avgs_with_pro <- read.table("../../data_tables/GO_terms/1_data_for_corr_avg_and_std_GO_terms_filtered_4_avgs_pro.tsv", header = TRUE) 
+pearson_corr_reps <- read.table("../../data_tables/GO_terms/1_data_for_corr_avg_and_std_GO_terms_filtered_4_reps.tsv", header = TRUE) 
+pearson_corr_reps_with_pro <- read.table("../../data_tables/GO_terms/1_data_for_corr_avg_and_std_GO_terms_filtered_4_reps_pro.tsv", header = TRUE) 
 
-# Take top number values from each dataframe 
-top_num <- 2
-sample_name <- "sa_sex"
+
 # top_pearson_corr_avgs <- head(pearson_corr_avgs[order(pearson_corr_avgs$Value),], top_num)
 # top_pearson_corr_avgs_with_pro <- head(pearson_corr_avgs_with_pro[order(pearson_corr_avgs_with_pro$Value),], top_num)
 # top_pearson_corr_rep <- head(pearson_corr_rep[order(pearson_corr_rep$Value),], top_num)
@@ -89,11 +94,7 @@ for (corr in corrs){
     }
     a <- list(top_veg$BA_sex, top_veg$sa_sex, top_veg$BA_veg, top_pearson_corr_sa_veg$Avg_corr, top_veg$GO_term) #sa_veg
   }
-
-  
-  
   top_df <- list(top_df, a)
-  
 }
 
 BA_sex = c()
@@ -227,44 +228,4 @@ p_grid <- plot_grid(
   rel_heights = c(0.1, 1)
 )
 
-#par(mfrow=c(2,2))
-# stripchart(top_df[[1]][[1]][[1]][[2]],
-#            main="Pearson correlation value: avgs",
-#            xlab="BA_sex   sa_sex    BA_veg    sa_veg",
-#            ylab="Correlation value",
-#            method="jitter",
-#            col=c("green", "blue","red", "orange"),
-#            pch=1, 
-#            vertical=TRUE,
-#            ylim = c(-1, 1)
-# )
-# stripchart(top_df[[1]][[1]][[2]],
-#            main="Pearson correlation value: avgs with pro",
-#            xlab="BA_sex   sa_sex    BA_veg    sa_veg",
-#            ylab="Correlation value",
-#            method="jitter",
-#            col=c("green", "blue","red", "orange"),
-#            pch=1, 
-#            vertical=TRUE,
-#            ylim = c(-1, 1)
-# )
-# stripchart(top_df[[1]][[2]],
-#            main="Pearson correlation value: reps",
-#            xlab="BA_sex   sa_sex    BA_veg    sa_veg",
-#            ylab="Correlation value",
-#            method="jitter",
-#            col=c("green", "blue","red", "orange"),
-#            pch=1, 
-#            vertical=TRUE,
-#            ylim = c(-1, 1)
-# )
-# stripchart(top_df[[2]],
-#            main="Pearson correlation value: reps with pro",
-#            xlab="BA_sex   sa_sex    BA_veg    sa_veg",
-#            ylab="Correlation value",
-#            method="jitter",
-#            col=c("green", "blue","red", "orange"),
-#            pch=1, 
-#            vertical=TRUE,
-#            ylim = c(-1, 1)
-#)
+

@@ -1,7 +1,7 @@
 library("dplyr")
 
-translation_table <- read.delim("1_translation_table.tsv", TRUE)
-GO_terms <- read.delim("../annotation/GO/go_for_nc12.tsv", TRUE)
+translation_table <- read.delim("../../data_tables/1_translation_table.tsv", TRUE)
+GO_terms <- read.delim("../annotation/GO/go_for_nc12.tsv", TRUE) #GO terms taken from other github. 
 
 GO_terms <- GO_terms[order(GO_terms$Locus),] 
 tt <- translation_table[order(translation_table$geneID),]

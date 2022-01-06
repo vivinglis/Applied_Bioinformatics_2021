@@ -1,6 +1,6 @@
 library("stringi")
 
-GO_df <- read.delim("../../data_tables/1_genes_per_GO_term.tsv")
+GO_df <- read.delim("../../data_tables/GO_terms/1_genes_per_GO_term.tsv")
 
 #Distribution plot of number of genes in each GO term.
 ulst <- lapply(GO_df, unique)
@@ -17,7 +17,7 @@ gene_GO_dis <- ggplot(dis_df, aes(x=k, y=Freq)) +
 
 #Filter GO terms on the number(num) of genes it includes 
 num <- 4
-GO_filt <- as.data.frame(matrix(nrow=165, ncol=0))
+GO_filt <- as.data.frame(matrix(nrow=max(k)+1, ncol=0))
 for (i in 1:(ncol(GO_df))) {
   if (length(unique(GO_df[,i])) > num) {
     GO_filt <- cbind(GO_filt, GO_df[,i])
@@ -25,6 +25,7 @@ for (i in 1:(ncol(GO_df))) {
   }
 }
 
+##Save the filtered GO term table as a tsv.
 #write.table(GO_filt, "1_filtered_GO_terms_per_gene_4_or_more_genes_per_GO.tsv", quote=FALSE, sep='\t', row.names = FALSE)
 
 

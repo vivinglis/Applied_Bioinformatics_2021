@@ -1,14 +1,17 @@
 #Correlation analysis
+#Script to plot the average and standard deviation of GO terms separated by tissue. 
+#Choose [top_num], [std_threshold], and [corr_threshold] as you please.
+
 library("stringi")
 library("ggplot2")
 library("tidyverse")
 
 ####Read in tables
-pearson_corr_avgs <- read.table("../Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_avgs_non_allel_sep.tsv", header = TRUE)
-pearson_corr_avgs_with_pro <- read.table("../Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_avgs_with_pronon_allel_sep.tsv", header = TRUE)
-pearson_corr_rep <- read.table("../Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_rep_non_allel_sep.tsv", header = TRUE)
-pearson_corr_rep_with_pro <- read.table("../Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_rep_with_pronon_allel_sep.tsv", header = TRUE)
-GO_terms <- read.delim("1_filtered_GO_terms_per_gene_4_or_more_genes_per_GO.tsv")
+pearson_corr_avgs <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_non_allel_sep.tsv", header = TRUE)
+pearson_corr_avgs_with_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_with_pronon_allel_sep.tsv", header = TRUE)
+pearson_corr_rep <- read.table("../../data_tables/all_genes/1_pearson_corr_rep_non_allel_sep.tsv", header = TRUE)
+pearson_corr_rep_with_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_rep_with_pronon_allel_sep.tsv", header = TRUE)
+GO_terms <- read.delim("../../data_tables/GO_terms/1_filtered_GO_terms_per_gene_4_or_more_genes_per_GO.tsv")
 
 corrs <- list(pearson_corr_avgs, pearson_corr_avgs_with_pro, pearson_corr_rep, pearson_corr_rep_with_pro)
 avg_df <- as.data.frame(matrix(nrow=0, ncol = 7))
@@ -24,7 +27,6 @@ for (corr in corrs){
   for (i in 1:ncol(GO_terms)){
     per_GO_sex <- setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("GO_term","Corr", "k_val"))
     per_GO_veg <- setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("GO_term","Corr", "k_val"))
-
     for (j in 1:nrow(GO_terms)) {
       if (is.na(GO_terms[j, i])) {
         break
@@ -33,14 +35,12 @@ for (corr in corrs){
         sex <- data.frame(colnames(GO_terms)[i], pearson_corr_sex[GO_terms[j, i],"Value"], pearson_corr_sex[GO_terms[j, i], "k_value"])
         names(sex) <- c("GO_term","Corr", "k_val")
         per_GO_sex <- rbind(per_GO_sex, sex)
-        
       }
       if (!is.na(pearson_corr_veg[GO_terms[j, i], "Value"])){
         veg <- data.frame(colnames(GO_terms)[i], pearson_corr_veg[GO_terms[j, i], "Value"], pearson_corr_veg[GO_terms[j, i], "k_value"])
         names(veg) <- c("GO_term","Corr", "k_val")
         per_GO_veg <- rbind(per_GO_veg, veg)
       }
-     
     }
     temp_GO_sex <- data.frame("Sex", colnames(GO_terms)[i], mean(per_GO_sex$Corr), sqrt(var(per_GO_sex$Corr)), mean(per_GO_sex$k_val), sqrt(var(per_GO_sex$k_val)))
     temp_GO_veg <- data.frame("Veg", colnames(GO_terms)[i], mean(per_GO_veg$Corr), sqrt(var(per_GO_veg$Corr)), mean(per_GO_veg$k_val), sqrt(var(per_GO_veg$k_val)))
@@ -48,29 +48,21 @@ for (corr in corrs){
     names(temp_GO_veg) <- c("Tissue", "GO_term", "Avg_Corr", "SDev_Corr", "Avg_k_val", "SDev_k_val")
     GO_sex <- rbind(GO_sex, temp_GO_sex, temp_GO_veg)
   }
-  # Plotting
-
   top_df <- list(top_df, GO_sex)
 }
 
+# ------------------------------------------------- Analyzing and plotting ------------------------------------------
+# Choose parameters for the plots
+top_num <- 10
+std_threshold <- 1
+corr_threshold <- 1
 
 corr_avgs <- as.data.frame(top_df[[1]][[1]][[1]][[2]])
 corr_avgs_pro <- as.data.frame(top_df[[1]][[1]][[2]])
 corr_reps <- as.data.frame(top_df[[1]][[2]])
 corr_reps_pro <- as.data.frame(top_df[[2]])
 
-corr_veg_avgs <- corr_avgs %>% filter(Tissue == "Veg")
-corr_sex_avgs <- corr_avgs %>% filter(Tissue == "Sex")
-corr_veg_avgs_pro <- corr_avgs_pro %>% filter(Tissue == "Veg")
-corr_sex_avgs_pro <- corr_avgs_pro %>% filter(Tissue == "Sex")
-corr_veg_reps <- corr_reps %>% filter(Tissue == "Veg")
-corr_sex_reps <- corr_reps %>% filter(Tissue == "Sex")
-corr_veg_reps_pro <- corr_reps_pro %>% filter(Tissue == "Veg")
-corr_sex_reps_pro <- corr_reps_pro %>% filter(Tissue == "Sex")
 
-top_num <- 10
-std_threshold <- 1
-corr_threshold <- 1
 # #sample_name <- "sa_sex"
 # 
 # top_corr_avgs <- head(corr_avgs[order(corr_avgs$Avg_Corr),], top_num)
@@ -97,29 +89,6 @@ top_corr_avgs <- na.omit(top_corr_avgs)
 top_corr_avgs_pro <- na.omit(top_corr_avgs_pro)
 top_corr_reps <- na.omit(top_corr_reps)
 top_corr_reps_pro <- na.omit(top_corr_reps_pro)
-
-# sample_BA_veg <- grep("_BA_veg", colnames(gene_expr), value = TRUE)
-# sample_BA_sex <- grep("_BA_sex", colnames(gene_expr), value = TRUE)
-# sample_sa_veg <- grep("_sa_veg", colnames(gene_expr), value = TRUE)
-# sample_sa_sex <- grep("_sa_sex", colnames(gene_expr), value = TRUE)
-# 
-# samples <- list(sample_BA_veg, sample_BA_sex, sample_sa_veg, sample_sa_sex)
-# all_df <- setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Gene", "lineage", "met", "expr"))
-# for (gene in GO_terms$peptidyl.prolyl.cis.trans.isomerase.activity){
-#   if (is.na(gene)){
-#     break
-#   }
-#   for (sample in samples){
-#     per_gene <- setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Gene", "lineage","met", "expr"))
-#     
-#     for (lineage in sample){
-#       new <- data.frame(Gene = gene, lineage = lineage, met=met[gene,lineage], expr = gene_expr[gene, lineage])
-#       per_gene <- rbind(per_gene, new)
-#     }
-#     
-#     all_df <- rbind(all_df, per_gene)
-#   }
-# }
 
 
 p_avgs <- ggplot(data=top_corr_avgs, aes(x=Tissue, y=SDev_Corr, fill=Tissue, label=GO_term)) +
