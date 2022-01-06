@@ -1,4 +1,4 @@
-# Pearson correlation values plots, genes closest to 1
+# Pearson correlation values plots, genes with correlation value closest to 1. 
 
 rm(list = ls())
 
@@ -8,10 +8,10 @@ library(cowplot)
 library(ggVennDiagram)
 
 # Read in tables
-corr_avgs <- read.table("Applied_Bioinformatics_2021/data_tables/1_pearson_corr_avgs.tsv", header = TRUE) 
-corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
-corr_rep <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep.tsv", header = TRUE) 
-corr_rep_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep_with_pro.tsv", header = TRUE) 
+corr_avgs <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs.tsv", header = TRUE) 
+corr_avgs_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
+corr_rep <- read.table("../../data_tables/all_genes/1_pearson_corr_rep.tsv", header = TRUE) 
+corr_rep_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_rep_with_pro.tsv", header = TRUE) 
 
 
 # Top correlation values closest to 1
@@ -77,7 +77,3 @@ plot_grid(
   ncol = 1,
   rel_heights = c(0.1, 1)
 )
-
-
-# randomized data
-

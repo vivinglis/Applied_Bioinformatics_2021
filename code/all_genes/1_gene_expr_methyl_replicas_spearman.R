@@ -1,14 +1,16 @@
-# Keeping replicates separate 
+# Keeping replicates separate
+# Spearman correlation
+# Keep line 7 or 10 commented depending on want with or without promotor region. 
 
 # Methylation and gene expression table
 gene_expr <- read.table("Applied_Bioinformatics_2021/data_tables/1_rlog_normalised_allsamples.tsv", header = TRUE) 
-#met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv", header = TRUE)
+met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv", header = TRUE)
 
 # Methylation with promotor region 
-met <- read.table("Applied_Bioinformatics_2021/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
+#met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
 
-# Pearson correlation data table 
-pearson_corr <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("Geneid", "Allel", "Tissue", "Value", "k_value"))
+# Spearman correlation data table 
+spearman_corr <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("Geneid", "Allel", "Tissue", "Value", "k_value"))
 
 # Set Geneid as index
 rownames(met) <- met$Geneid
@@ -40,9 +42,9 @@ for (gene in genes) {
       names(new) <- c("Sample", "Met", "Expr")
       per_gene <- rbind(per_gene, new)
     }
-    #rownames(per_gene) <- per_gene$Sample
+    rownames(per_gene) <- per_gene$Sample
     
-    corr_value <- cor(per_gene$Met, per_gene$Expr) # Can also use cor.test()
+    corr_value <- cor(per_gene$Met, per_gene$Expr, method = "spearman") # Can also use cor.test()
     if (any(is.na(per_gene$Met))){
       k_value = NA
     }
@@ -52,31 +54,32 @@ for (gene in genes) {
     }
     corr_new <- data.frame(gene, samples_allel[num], samples_tissue[num], corr_value, k_value)
     names(corr_new) <- c("Geneid", "Allel", "Tissue", "Value", "k_value")
-    pearson_corr <- rbind(pearson_corr, corr_new)
+    spearman_corr <- rbind(spearman_corr, corr_new)
     num = num +1
   }
 }
-#write.table(pearson_corr, "new/1_pearson_corr_rep.tsv")
-write.table(pearson_corr, "new/1_pearson_corr_rep_with_pro.tsv")
+write.table(spearman_corr, file = "new/1_spearman_corr_rep.tsv")
+#write.table(spearman_corr, file = "new/1_spearman_corr_rep_with_pro.tsv")
 
 
 # Not separated on Ba sa ------------------------------------------------------------------
 
-#Methylation and gene expression table
+# Methylation and gene expression table
 gene_expr <- read.table("Applied_Bioinformatics_2021/data_tables/1_rlog_normalised_allsamples.tsv", header = TRUE) 
-#met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv", header = TRUE)
+met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv", header = TRUE)
 
 # Methylation with promotor region 
-met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
+#met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
 
-# Pearson correlation data table 
-pearson_corr <- setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Geneid", "Tissue", "Value", "k_value"))
+# Spearman correlation data table 
+spearman_corr <- setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Geneid", "Tissue", "Value", "k_value"))
 
 # Set Geneid as index
 rownames(met) <- met$Geneid
 rownames(gene_expr) <- gene_expr$Geneid
 
-# each is a new plot
+# each is a new plot 
+# each is a new plot 
 sample_veg <- grep("_veg", colnames(gene_expr), value = TRUE)
 sample_sex <- grep("_sex", colnames(gene_expr), value = TRUE)
 
@@ -84,7 +87,7 @@ samples <- list(sample_veg, sample_sex)
 samples_tissue <- list("veg", "sex")
 
 genes = rownames(met)
-# genes <- c("Ntsc1042", "Ntsc1043")  # For test 
+# genes <- c("Ntsc1042", "Ntsc1043")  # For test of code
 
 for (gene in genes) {
   num = 1
@@ -99,9 +102,9 @@ for (gene in genes) {
       names(new) <- c("Sample", "Met", "Expr")
       per_gene <- rbind(per_gene, new)
     }
-    #rownames(per_gene) <- per_gene$Sample
+    rownames(per_gene) <- per_gene$Sample
     
-    corr_value <- cor(per_gene$Met, per_gene$Expr) # Can also use cor.test()
+    corr_value <- cor(per_gene$Met, per_gene$Expr, method = "spearman") # Can also use cor.test()
     if (any(is.na(per_gene$Met))){
       k_value = NA
     }
@@ -111,12 +114,9 @@ for (gene in genes) {
     }
     corr_new <- data.frame(gene, samples_tissue[num], corr_value, k_value)
     names(corr_new) <- c("Geneid", "Tissue", "Value", "k_value")
-    pearson_corr <- rbind(pearson_corr, corr_new)
+    spearman_corr <- rbind(spearman_corr, corr_new)
     num = num +1
   }
 }
-
-#write.table(pearson_corr, "new/1_pearson_corr_rep_non_allel_sep.tsv")
-write.table(pearson_corr, "new/1_pearson_corr_rep_with_pronon_allel_sep.tsv")
-
-
+write.table(spearman_corr, file = "new/1_spearman_corr_rep_non_allel_sep.tsv")
+#write.table(spearman_corr, file = "new/1_spearman_corr_rep_with_pro_non_allel_sep.tsv")

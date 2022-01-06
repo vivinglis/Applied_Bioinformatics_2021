@@ -1,12 +1,13 @@
-# Using avg gene expression values, 
-# keep one of line 5 or 8 commented depending on want with or without promotor region  
+# Using avg gene expression values,
+# Pearson correlation value
+# keep one of line 7 or 10 commented depending on want with or without promotor region  
 
 # Methylation and gene expression table
 gene_expr <- read.table("Applied_Bioinformatics_2021/1_rlog_normalised_avgs.tsv", header = TRUE) 
-#met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv", header = TRUE)
+met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv", header = TRUE)
 
 # Methylation with promotor region 
-met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
+#met <- read.table("Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation_with_promotor_region.tsv", header = TRUE)
 
 # Pearson correlation data table 
 pearson_corr <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("Geneid", "Allel", "Tissue", "Value", "k_value"))
@@ -26,7 +27,7 @@ samples_allel <- list("BA", "BA", "sa", "sa")
 samples_tissue <- list("veg", "sex", "veg", "sex")
 
 genes = rownames(met)
-#genes <- c("Ntsc1042", "Ntsc1043")  # For test 
+#genes <- c("Ntsc1042", "Ntsc1043")  # For test of code
 
 for (gene in genes) {
   num = 1
@@ -56,14 +57,14 @@ for (gene in genes) {
   }
 }
 
-#write.table(pearson_corr, "new/1_pearson_corr_avgs.tsv")
-write.table(pearson_corr, "new/1_pearson_corr_avgs_with_pro.tsv")
+write.table(pearson_corr, "1_pearson_corr_avgs.tsv")
+#write.table(pearson_corr, "1_pearson_corr_avgs_with_pro.tsv")
 
 
 # Not separated on Ba sa ------------------------------------------------------------------
 
 # Using avg gene expression values, 
-# keep one of line 5 or 8 commented depending on want with or without promotor region  
+# keep one of line 71 or 74 commented depending on want with or without promotor region  
 
 # Methylation and gene expression table
 gene_expr <- read.table("Applied_Bioinformatics_2021/1_rlog_normalised_avgs.tsv", header = TRUE) 
@@ -88,7 +89,7 @@ samples <- list(sample_veg, sample_sex)
 samples_tissue <- list("veg", "sex")
 
 genes = rownames(met)
-#genes <- c("Ntsc1042", "Ntsc1043")  # For test 
+#genes <- c("Ntsc1042", "Ntsc1043")  # For test of code
 
 for (gene in genes) {
   num = 1
@@ -118,6 +119,6 @@ for (gene in genes) {
   }
 }
 
-#write.table(pearson_corr, "new/1_pearson_corr_avgs_non_allel_sep.tsv")
-write.table(pearson_corr, "new/1_pearson_corr_avgs_with_pronon_allel_sep.tsv")
+write.table(pearson_corr, "1_pearson_corr_avgs_non_allel_sep.tsv")
+#write.table(pearson_corr, "1_pearson_corr_avgs_with_pro_non_allel_sep.tsv")
 

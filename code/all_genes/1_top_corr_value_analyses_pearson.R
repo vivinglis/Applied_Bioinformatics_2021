@@ -8,10 +8,10 @@ library(cowplot)
 library(ggVennDiagram)
 
 # Read in tables
-corr_avgs <- read.table("Applied_Bioinformatics_2021/data_tables/1_pearson_corr_avgs.tsv", header = TRUE) 
-corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
-corr_rep <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep.tsv", header = TRUE) 
-corr_rep_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_2_pearson_corr_rep_with_pro.tsv", header = TRUE) 
+corr_avgs <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs.tsv", header = TRUE) 
+corr_avgs_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
+corr_rep <- read.table("../../data_tables/all_genes/1_pearson_corr_rep.tsv", header = TRUE) 
+corr_rep_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_rep_with_pro.tsv", header = TRUE) 
  
 # All genes
 corr_avgs$Tissue <- as.factor(corr_avgs$Tissue)
@@ -124,7 +124,7 @@ plot_grid(
 
 top_num <- 100
 
-# Keep one incommented, and change name on line 255 accordingly.
+# Keep section uncommented, and change name on line 255 accordingly.
 
 # Avgs without promotor
 #veg <- subset(corr_avgs, Tissue == "veg")

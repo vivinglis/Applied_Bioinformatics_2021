@@ -7,10 +7,10 @@ library(ggplot2)
 library(cowplot)
 library(ggVennDiagram)
 
-corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_avgs_with_pronon_allel_sep.tsv", header = TRUE) 
-corr_avgs <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_avgs_non_allel_sep.tsv", header = TRUE)
-corr_rep <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_rep_non_allel_sep.tsv", header = TRUE) 
-corr_rep_pro <- read.table("Applied_Bioinformatics_2021/k_data_tables/1_pearson_corr_rep_with_pronon_allel_sep.tsv", header = TRUE)
+corr_avgs_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_with_pro_non_allel_sep.tsv", header = TRUE) 
+corr_avgs <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_non_allel_sep.tsv", header = TRUE)
+corr_rep <- read.table("../../data_tables/all_genes/1_pearson_corr_rep_non_allel_sep.tsv", header = TRUE) 
+corr_rep_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_rep_with_pro_non_allel_sep.tsv", header = TRUE)
 
 
 # All genes
@@ -56,7 +56,7 @@ plot_grid(plot_row,
 )
 
 
-# Plot with avgs pro top 100 enskilt
+# Plot with avgs pro top 100 
 top_num <- 100
 
 veg <- subset(corr_avgs_pro, Tissue == "veg")
@@ -84,7 +84,7 @@ avgs_p
 top_num <- 100
 
 # Load dataset avgs pro, created from correlation value where mating type was separated
-corr_avgs_pro <- read.table("Applied_Bioinformatics_2021/data_tables/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
+corr_avgs_pro <- read.table("../../data_tables/all_genes/1_pearson_corr_avgs_with_pro.tsv", header = TRUE) 
 
 # Avgs with promotor, 
 veg <- subset(corr_avgs_pro, Tissue == "veg")
@@ -227,7 +227,7 @@ top_genes <- data.frame(cbind(top_veg_sa$Geneid, top_veg_ba$Geneid, top_sex_sa$G
 names(top_genes) <- c("veg_sa", "veg_ba", "sex_sa", "sex_ba")
 
 b <- ggVennDiagram(top_genes, cex = 100)
-b
+
 
 
 
