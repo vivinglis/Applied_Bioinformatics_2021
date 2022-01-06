@@ -11,7 +11,7 @@ library(dplyr)
 
 # Import datasets 
 TEs <- read.delim("~/Applied_bioinformatics/NeurosporaMethylation/annotation/TE/crassaBA_2489_TEs", header=FALSE)
-translation_table <- read.delim("~/Applied_bioinformatics/Applied_Bioinformatics_2021/1_translation_table.tsv")
+translation_table <- read.delim("~/Applied_bioinformatics/Applied_Bioinformatics_2021/data_tables/1_translation_table.tsv")
 methylation_table <- read.delim("~/Applied_bioinformatics/Applied_Bioinformatics_2021/data_tables/1_orthologous_genes_methylation.tsv")
 
 rownames(methylation_table) <- methylation_table$Geneid
@@ -34,9 +34,9 @@ chr_genes <- unique(gene_table[c("Chromosome")])
 chromosomes <- intersect(chr_te[,"chromosome"], chr_genes[,"Chromosome"])
 
 # Long TEs 
-TEs <- subset(TEs, stop - start > 400)
+# TEs <- subset(TEs, stop - start > 400)
 # Short TEs 
-# TEs <- subset(TEs, stop - start <= 400)
+TEs <- subset(TEs, stop - start <= 400)
 
 for (chr in chromosomes) {
   print(chr)
@@ -63,7 +63,7 @@ for (chr in chromosomes) {
         break
       }
       # are before the first TE 
-      else if (row == 1 & gene_end < TEs_chr[row, "start"]){
+      else if (row == 1 && gene_end < TEs_chr[row, "start"]){
         min_distance <- TEs_chr[row, "start"] - gene_end
         break
       }
@@ -109,10 +109,10 @@ for (chr in chromosomes) {
 } # chr loop end
 
 # long TEs
-distance_matrix_long <- distance_matrix
+#distance_matrix_long <- distance_matrix
 
 #Short TEs
-# distance_matrix_short <- distance_matrix
+distance_matrix_short <- distance_matrix
 
 # Sex tissue 
 long <- ggplot(distance_matrix_long, aes(distance, met_sex)) + 
@@ -144,20 +144,17 @@ short_close <- ggplot(close_distance_short, aes(distance, met_sex )) +
   stat_regline_equation(label.y = 0.9, label.x = 750, aes(label = ..rr.label..))+
                labs(title="Compare to short TEs", y = "Methylation level",
                      x = "Distance to closest TE")
-
-plot_row <- plot_grid(long, long_close, short, short_close)
+s <- 15
+plot_row <- plot_grid(long + theme(text = element_text(size = s)), 
+                      long_close + theme(text = element_text(size = s)),
+                      short + theme(text = element_text(size = s)), 
+                      short_close + theme(text = element_text(size = s)), 
+                      labels = c("A", "B", "C", "D"))
 
 title <- ggdraw() + 
-  draw_label(
-    "Methylation level against distance to closest TE for Crassa_BA_sex",
-    fontface = 'bold',
-    x = 0,
-    hjust = 0
-  ) +
   theme(plot.margin = margin(0, 0, 0, 7))
 
-plot_grid(
-  title, plot_row,
+plot_grid(plot_row,
   ncol = 1,
   rel_heights = c(0.1, 1)
 )
@@ -172,7 +169,6 @@ long <- ggplot(distance_matrix_long, aes(distance, met_veg)) +
   labs(title="Compare to long TEs", y = "Methylation level",
        x = "Distance to closest TE") 
   
-
 close_distance_long <- subset(distance_matrix_long, distance <=  1000)
 long_close <- ggplot(close_distance_long, aes(distance, met_veg )) + 
   geom_point()+ geom_smooth(method = "lm", se=FALSE) +
@@ -196,19 +192,16 @@ short_close <- ggplot(close_distance_short, aes(distance, met_veg )) +
   labs(title="Compare to short TEs", y = "Methylation level",
        x = "Distance to closest TE")
 
-plot_row <- plot_grid(long, long_close, short, short_close)
+plot_row <- plot_grid(long + theme(text = element_text(size = s)), 
+                      close_distance_long + theme(text = element_text(size = s)),
+                      short + theme(text = element_text(size = s)), 
+                      close_distance_short + theme(text = element_text(size = s)), 
+                      labels = c("A", "B", "C", "D"))
 
 title <- ggdraw() + 
-  draw_label(
-    "Methylation level against distance to TE for Crassa _BA_veg",
-    fontface = 'bold',
-    x = 0,
-    hjust = 0
-  ) +
   theme(plot.margin = margin(0, 0, 0, 7))
 
-plot_grid(
-  title, plot_row,
+plot_grid(plot_row,
   ncol = 1,
   rel_heights = c(0.1, 1)
 )
