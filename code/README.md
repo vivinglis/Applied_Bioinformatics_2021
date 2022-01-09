@@ -1,6 +1,4 @@
-The analyse is divided into four parts not counting the preprocessing scripts. 
-
-Preprocessing script are the ones not in a folder, by name: _1_create_rlog_normalised_expression.R_, _1_getting_translation_table.R_  
+The analyis is divided into four parts not counting the preprocessing scripts. 
 
 Folders:  
 _all_genes_: Scripts handling analyses regarding all genes.  
